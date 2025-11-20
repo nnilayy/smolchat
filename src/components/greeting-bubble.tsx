@@ -25,7 +25,7 @@ export const GreetingBubble = ({ bot }: TGreetingBubble) => {
               animate={"visible"}
               initial={"hidden"}
             >
-              {bot.greetingMessage}
+              {bot.systemPrompt}
             </motion.span>
           </p>
         </div>
