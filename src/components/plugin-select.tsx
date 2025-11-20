@@ -43,7 +43,7 @@ export const PluginSelect = ({ selectedAssistantKey }: TPluginSelect) => {
         <Tooltip content="Tools">
           <PopoverTrigger asChild>
             <Button variant="ghost" size="sm" className="px-2">
-              <ConnectIcon size={16} variant="stroke" strokeWidth="2" />
+              <ConnectIcon size={16} strokeWidth="2" />
               <Badge>{selectedPlugins.length}</Badge>
             </Button>
           </PopoverTrigger>

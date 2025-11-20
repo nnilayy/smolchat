@@ -144,7 +144,7 @@ export const HistoryItem = ({
                     e.stopPropagation();
                   }}
                 >
-                  <Delete01Icon size={14} variant="stroke" strokeWidth="2" />
+                  <Delete01Icon size={14} strokeWidth="2" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="z-[1000]" side="bottom">

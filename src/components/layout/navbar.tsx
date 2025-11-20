@@ -46,9 +46,9 @@ export const Navbar = () => {
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
           {theme === "dark" ? (
-            <Sun01Icon size={20} variant="stroke" strokeWidth="2" />
+            <Sun01Icon size={20} strokeWidth="2" />
           ) : (
-            <Moon02Icon size={20} variant="stroke" strokeWidth="2" />
+            <Moon02Icon size={20} strokeWidth="2" />
           )}
         </Button>
       </Tooltip>
@@ -94,9 +94,9 @@ export const Navbar = () => {
             }}
           >
             {theme === "light" ? (
-              <Moon02Icon size={18} variant="stroke" strokeWidth="2" />
+              <Moon02Icon size={18} strokeWidth="2" />
             ) : (
-              <Sun01Icon size={18} variant="stroke" strokeWidth="2" />
+              <Sun01Icon size={18} strokeWidth="2" />
             )}
             Switch to {theme === "light" ? "dark" : "light"} mode
           </DropdownMenuItem>

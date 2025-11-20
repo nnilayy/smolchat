@@ -249,9 +249,9 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                   onClick={handleCopyContent}
                 >
                   {showCopied ? (
-                    <Tick01Icon size={18} variant="stroke" strokeWidth={"2"} />
+                    <Tick01Icon size={18} strokeWidth={"2"} />
                   ) : (
-                    <Copy01Icon size={18} variant="stroke" strokeWidth={"2"} />
+                    <Copy01Icon size={18} strokeWidth={"2"} />
                   )}
                 </Button>
               </Tooltip>
@@ -265,11 +265,10 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                     onClick={() => speak(rawAI || "")}
                   >
                     {isSpeaking ? (
-                      <StopIcon size={18} variant="stroke" strokeWidth={"2"} />
+                      <StopIcon size={18} strokeWidth={"2"} />
                     ) : (
                       <VolumeHighIcon
                         size={18}
-                        variant="stroke"
                         strokeWidth={"2"}
                       />
                     )}
@@ -286,7 +285,6 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                 >
                   <ThumbsUpIcon
                     size={18}
-                    variant={feedback === "like" ? "solid" : "stroke"}
                     strokeWidth={"2"}
                     className={feedback === "like" ? "text-emerald-500" : ""}
                   />
@@ -302,7 +300,6 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                 >
                   <ThumbsDownIcon
                     size={18}
-                    variant={feedback === "dislike" ? "solid" : "stroke"}
                     strokeWidth={"2"}
                     className={feedback === "dislike" ? "text-red-500" : ""}
                   />
@@ -317,7 +314,6 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
                     <Button variant="ghost" size="iconSm" rounded="lg">
                       <Delete01Icon
                         size={18}
-                        variant="stroke"
                         strokeWidth={"2"}
                       />
                     </Button>

@@ -19,7 +19,7 @@ export const HistorySidebar = () => {
       <Tooltip content="Chat History" side="left" sideOffset={4}>
         <Drawer.Trigger asChild>
           <Button variant="ghost" size="iconSm">
-            <SidebarLeftIcon size={20} variant="stroke" strokeWidth="2" />
+            <SidebarLeftIcon size={20} strokeWidth="2" />
           </Button>
         </Drawer.Trigger>
       </Tooltip>
@@ -67,7 +67,7 @@ export const HistorySidebar = () => {
                     setOpen(false);
                   }}
                 >
-                  <PlusSignIcon size={18} variant="stroke" strokeWidth="2" />
+                  <PlusSignIcon size={18} strokeWidth="2" />
                   New Chat
                 </Button>
               </div>
