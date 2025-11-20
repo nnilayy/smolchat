@@ -14,19 +14,33 @@ import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube
 import { WolframAlphaTool } from "@langchain/community/tools/wolframalpha";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
       messages,
       model,
-      apiKey,
+      apiKey: rawApiKey,
       baseModel,
       tools: toolNames = [],
       searchPreferences = {},
       systemPrompt,
       signal,
     } = body;
+
+    const apiKey = rawApiKey?.trim() || undefined;
+
+    console.log("API Request:", {
+      model,
+      baseModel,
+      hasApiKey: !!apiKey,
+      apiKeyLength: apiKey?.length,
+      apiKeyStart: apiKey?.substring(0, 3),
+      apiKeyEnd: apiKey?.substring(apiKey.length - 3),
+    });
 
     // Instantiate tools
     const tools = [];

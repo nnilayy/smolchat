@@ -4,10 +4,6 @@ import { ArrowLeft01Icon, ArrowRight01Icon } from "hugeicons-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
-const getProxyUrl = (url: string) => {
-  return `/api/proxy-image?url=${encodeURIComponent(url)}`;
-};
-
 export const WolframImages = ({ content }: { content: string }) => {
   const extractImages = (text: string) => {
     const matches = new Set<string>();
@@ -38,10 +34,9 @@ export const WolframImages = ({ content }: { content: string }) => {
     return (
       <div className="w-full mt-4 rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800">
         <img
-          src={getProxyUrl(images[0])}
+          src={images[0]}
           alt="Wolfram Alpha Result"
           className="w-full h-auto object-contain bg-white"
-          referrerPolicy="no-referrer"
         />
       </div>
     );
@@ -56,10 +51,9 @@ export const WolframImages = ({ content }: { content: string }) => {
             className="rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800"
           >
             <img
-              src={getProxyUrl(img)}
+              src={img}
               alt={`Wolfram Alpha Result ${idx + 1}`}
               className="w-full h-auto object-contain bg-white"
-              referrerPolicy="no-referrer"
             />
           </div>
         ))}
@@ -87,14 +81,13 @@ const ImageSlider = ({ images }: { images: string[] }) => {
         <AnimatePresence mode="wait">
           <motion.img
             key={currentIndex}
-            src={getProxyUrl(images[currentIndex])}
+            src={images[currentIndex]}
             alt={`Wolfram Alpha Result ${currentIndex + 1}`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
             className="w-full h-full object-contain"
-            referrerPolicy="no-referrer"
           />
         </AnimatePresence>
       </div>
