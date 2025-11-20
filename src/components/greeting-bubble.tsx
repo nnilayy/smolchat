@@ -13,7 +13,7 @@ export const GreetingBubble = ({ bot }: TGreetingBubble) => {
     <div className="flex flex-col md:flex-row gap-2 mt-6 w-full">
       <div className="px-0 md:px-3 py-1">
         <Tooltip content={bot?.name}>
-          <BotAvatar size={"small"} name={bot?.name} avatar={bot?.avatar} />
+          <BotAvatar size={"small"} name={bot?.name} />
         </Tooltip>
       </div>
       <div className="rounded-2xl w-full flex flex-col items-start">
