@@ -37,6 +37,7 @@ export const WolframImages = ({ content }: { content: string }) => {
           src={images[0]}
           alt="Wolfram Alpha Result"
           className="w-full h-auto object-contain bg-white"
+          referrerPolicy="no-referrer"
         />
       </div>
     );
@@ -54,6 +55,7 @@ export const WolframImages = ({ content }: { content: string }) => {
               src={img}
               alt={`Wolfram Alpha Result ${idx + 1}`}
               className="w-full h-auto object-contain bg-white"
+              referrerPolicy="no-referrer"
             />
           </div>
         ))}
@@ -88,6 +90,7 @@ const ImageSlider = ({ images }: { images: string[] }) => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
             className="w-full h-full object-contain"
+            referrerPolicy="no-referrer"
           />
         </AnimatePresence>
       </div>
