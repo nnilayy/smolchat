@@ -1,11 +1,11 @@
-import { TBot } from "@/hooks/use-bots";
+import { TAssistant } from "@/hooks/use-chat-session";
 import { BotAvatar } from "./ui/bot-avatar";
 import { motion } from "framer-motion";
 import { REVEAL_ANIMATION_VARIANTS } from "@/hooks/use-mdx";
 import { Tooltip } from "./ui/tooltip";
 
 export type TGreetingBubble = {
-  bot: TBot;
+  bot: TAssistant;
 };
 
 export const GreetingBubble = ({ bot }: TGreetingBubble) => {
