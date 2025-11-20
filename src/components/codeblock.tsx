@@ -39,9 +39,9 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
             }}
           >
             {showCopied ? (
-              <Tick01Icon size={14} variant="stroke" strokeWidth="2" />
+              <Tick01Icon size={14} strokeWidth="2" />
             ) : (
-              <Copy01Icon size={14} variant="stroke" strokeWidth="2" />
+              <Copy01Icon size={14} strokeWidth="2" />
             )}{" "}
             Copy Code
           </Button>
