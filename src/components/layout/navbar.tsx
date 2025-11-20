@@ -5,28 +5,19 @@ import {
 import { Gear } from "@phosphor-icons/react";
 import {
   Moon02Icon,
-  MoreHorizontalIcon,
   NoteIcon,
   PlusSignIcon,
   Sun01Icon,
 } from "hugeicons-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
 import { HistorySidebar } from "../history/history-side-bar";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { Flex } from "../ui/flex";
 import { Tooltip } from "../ui/tooltip";
 
 export const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const { open: openSettings } = useSettingsContext();
-  const [isOpen, setIsOpen] = useState(false);
   const { createSession } = useSessionsContext();
 
   return (
@@ -63,45 +54,7 @@ export const Navbar = () => {
           <Gear size={20} />
         </Button>
       </Tooltip>
-      <DropdownMenu
-        open={isOpen}
-        onOpenChange={(open) => {
-          document.body.style.pointerEvents = "auto";
-          setIsOpen(open);
-        }}
-      >
-        <Tooltip content="More" side="left" sideOffset={4}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="iconSm">
-              <MoreHorizontalIcon size={20} />
-            </Button>
-          </DropdownMenuTrigger>
-        </Tooltip>
-        <DropdownMenuContent
-          className="min-w-[250px] text-sm md:text-base mr-2"
-          align="end"
-          side="left"
-          sideOffset={4}
-        >
-          <DropdownMenuItem onClick={() => {}}>About</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => {}}>Feedback</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => {}}>Support</DropdownMenuItem>
-          <div className="my-1 h-[1px] bg-black/10 dark:bg-white/10 w-full" />
 
-          <DropdownMenuItem
-            onClick={() => {
-              setTheme(theme === "light" ? "dark" : "light");
-            }}
-          >
-            {theme === "light" ? (
-              <Moon02Icon size={18} strokeWidth="2" />
-            ) : (
-              <Sun01Icon size={18} strokeWidth="2" />
-            )}
-            Switch to {theme === "light" ? "dark" : "light"} mode
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </div>
   );
 };
