@@ -1,5 +1,6 @@
-import { usePreferenceContext } from "@/context/preferences";
+import { usePreferenceContext, useSettingsContext } from "@/context";
 import { EMBEDDING_PROVIDERS } from "@/lib/embeddings-config";
+import { useToast } from "@/components/ui/use-toast";
 import {
   ArrowClockwise,
   ArrowRight,
@@ -8,7 +9,7 @@ import {
   Faders,
   Info,
 } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Flex } from "../ui/flex";
 import { Input } from "../ui/input";
@@ -31,8 +32,21 @@ import { defaultPreferences } from "@/hooks/use-preferences";
 
 export const RagSettings = () => {
   const { preferences, updatePreferences } = usePreferenceContext();
+  const { selectedSubMenu } = useSettingsContext();
+  const { toast } = useToast();
   const { ragSettings } = preferences;
   const [tempKey, setTempKey] = useState("");
+  const [accordionValue, setAccordionValue] = useState<string[]>(
+    selectedSubMenu
+      ? Array.from(new Set(["embedding", "retrieval", selectedSubMenu]))
+      : ["embedding", "retrieval"]
+  );
+
+  useEffect(() => {
+    if (selectedSubMenu && !accordionValue.includes(selectedSubMenu)) {
+      setAccordionValue((prev) => [...prev, selectedSubMenu]);
+    }
+  }, [selectedSubMenu]);
 
   const updateRagSettings = (updates: Partial<typeof ragSettings>) => {
     updatePreferences({
@@ -65,7 +79,8 @@ export const RagSettings = () => {
         <Accordion
           type="multiple"
           className="w-full"
-          defaultValue={["embedding", "retrieval"]}
+          value={accordionValue}
+          onValueChange={setAccordionValue}
         >
           <AccordionItem value="embedding">
             <AccordionTrigger>
@@ -149,7 +164,14 @@ export const RagSettings = () => {
                       <Button
                         variant="default"
                         size="sm"
-                        onClick={() => updateRagSettings({ apiKey: tempKey })}
+                        onClick={() => {
+                          updateRagSettings({ apiKey: tempKey });
+                          toast({
+                            title: "Success",
+                            description: "Embedding model API key saved",
+                            variant: "default",
+                          });
+                        }}
                       >
                         Save API Key
                       </Button>

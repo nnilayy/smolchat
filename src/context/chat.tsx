@@ -241,7 +241,14 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         stop: true,
         stopReason: "apikey",
       });
-
+      toast({
+        title: "API Key Missing",
+        description: `Please add an API key for ${
+          selectedModelKey?.name || "the selected model"
+        }`,
+        variant: "destructive",
+      });
+      openSettings("models", selectedModelKey?.baseModel);
       return;
     }
 
@@ -500,7 +507,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
         description: "API key is missing. Please check your settings.",
         variant: "destructive",
       });
-      openSettings(assitantprops.model.baseModel);
+      openSettings("models", assitantprops.model.baseModel);
       return;
     }
 

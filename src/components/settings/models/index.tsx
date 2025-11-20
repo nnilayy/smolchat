@@ -1,4 +1,4 @@
-import { usePreferenceContext } from "@/context";
+import { usePreferenceContext, useSettingsContext } from "@/context";
 import { OpenAISettings } from "./openai";
 import { AnthropicSettings } from "./anthropic";
 import { GeminiSettings } from "./gemini";
@@ -13,9 +13,19 @@ import {
 import { ModelIcon, ModelIconType } from "@/components/model-icon";
 import { CheckmarkCircle02Icon, AlertCircleIcon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export const ModelSettings = () => {
   const { apiKeys } = usePreferenceContext();
+  const { selectedSubMenu } = useSettingsContext();
+  const [value, setValue] = useState(selectedSubMenu || "openai");
+
+  useEffect(() => {
+    if (selectedSubMenu) {
+      setValue(selectedSubMenu);
+    }
+  }, [selectedSubMenu]);
+
   const modelSettingsData = [
     {
       label: "OpenAI",
@@ -49,7 +59,13 @@ export const ModelSettings = () => {
 
   return (
     <Flex direction={"col"} gap={"lg"} className="p-2">
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        value={value}
+        onValueChange={setValue}
+      >
         {modelSettingsData.map((model) => (
           <AccordionItem key={model.value} value={model.value}>
             <AccordionTrigger>

@@ -51,13 +51,28 @@ export const OllamaSettings = () => {
         placeholder="http://localhost:11434"
         value={url}
         autoComplete="off"
+        disabled={!!preferences.ollamaBaseUrl}
         onChange={handleURLChange}
       />
 
       <div className="flex flex-row items-center gap-2">
-        <Button size="sm" onClick={verifyAndSaveURL}>
-          Save & Check Connection
-        </Button>
+        {!preferences.ollamaBaseUrl && (
+          <Button size="sm" onClick={verifyAndSaveURL}>
+            Save & Check Connection
+          </Button>
+        )}
+        {preferences.ollamaBaseUrl && (
+          <Button
+            variant={"outline"}
+            size={"sm"}
+            onClick={() => {
+              setURL("");
+              updatePreferences({ ollamaBaseUrl: "" });
+            }}
+          >
+            Remove URL
+          </Button>
+        )}
       </div>
       {/* TODO: Add FAQ Section with q and a here you can use Type Component */}
     </Flex>

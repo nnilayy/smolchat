@@ -23,6 +23,7 @@ export const OpenAISettings = () => {
         value={key}
         type="password"
         autoComplete="off"
+        disabled={!!apiKeys.openai}
         onChange={(e) => {
           setKey(e.target.value);
         }}

@@ -5,6 +5,7 @@ import { usePreferenceContext } from "@/context/preferences";
 import { googleSearchTool } from "@/tools/google";
 import { tavilySearchTool } from "@/tools/tavily";
 import { useSettingsContext } from "@/context";
+import { useToast } from "@/components/ui/use-toast";
 import {
   GlobalSearchIcon,
   HugeiconsProps,
@@ -61,6 +62,7 @@ export type TTool = {
 export const useTools = () => {
   const { preferences, updatePreferences, apiKeys } = usePreferenceContext();
   const { open } = useSettingsContext();
+  const { toast } = useToast();
   const tools: TTool[] = [
     {
       key: "web_search",
@@ -82,17 +84,28 @@ export const useTools = () => {
       icon: GlobalSearchIcon,
       smallIcon: GlobalSearchIcon,
       validate: async () => {
-        if (
-          preferences?.defaultWebSearchEngine === "google" &&
-          (!preferences?.googleSearchApiKey ||
-            !preferences?.googleSearchEngineId)
-        ) {
-          return false;
+        if (preferences?.defaultWebSearchEngine === "google") {
+          if (
+            !preferences?.googleSearchApiKey ||
+            !preferences?.googleSearchEngineId
+          ) {
+            return false;
+          }
+        }
+        if (preferences?.defaultWebSearchEngine === "tavily") {
+          if (!preferences?.tavilyApiKey) {
+            return false;
+          }
         }
         return true;
       },
       validationFailedAction: () => {
-        open("web-search");
+        toast({
+          title: "Web Search API Key Missing",
+          description: "To use Web Search tool, set an API key",
+          variant: "destructive",
+        });
+        open("plugins", "websearch");
       },
     },
     {
@@ -117,9 +130,20 @@ export const useTools = () => {
       icon: File02Icon,
       smallIcon: File02Icon,
       validate: async () => {
+        if (!preferences.ragSettings?.apiKey) {
+          return false;
+        }
         return true;
       },
-      validationFailedAction: () => {},
+      validationFailedAction: () => {
+        toast({
+          title: "Embedding Model API Key Missing",
+          description:
+            "To use RAG tool, set an API key for the embedding model",
+          variant: "destructive",
+        });
+        open("rag", "embedding");
+      },
     },
     {
       key: "youtube_tool",
@@ -153,7 +177,12 @@ export const useTools = () => {
         return true;
       },
       validationFailedAction: () => {
-        open("wolfram");
+        toast({
+          title: "Wolfram Alpha API Key Missing",
+          description: "To use Wolfram Alpha tool, set an API key",
+          variant: "destructive",
+        });
+        open("plugins", "wolfram");
       },
     },
     {

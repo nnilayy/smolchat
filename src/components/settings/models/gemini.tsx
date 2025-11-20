@@ -25,6 +25,7 @@ export const GeminiSettings = () => {
         type="password"
         autoComplete="off"
         value={key}
+        disabled={!!apiKeys.gemini}
         onChange={(e) => {
           setKey(e.target.value);
         }}

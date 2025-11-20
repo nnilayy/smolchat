@@ -22,8 +22,9 @@ import { useState } from "react";
 import { createContext, useContext } from "react";
 
 export type TSettingsContext = {
-  open: (menu?: string) => void;
+  open: (menu?: string, subMenu?: string) => void;
   dismiss: () => void;
+  selectedSubMenu?: string;
 };
 export const SettingsContext = createContext<undefined | TSettingsContext>(
   undefined
@@ -50,13 +51,20 @@ export type TSettingMenuItem = {
 export const SettingsProvider = ({ children }: TSettingsProvider) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("common");
+  const [selectedSubMenu, setSelectedSubMenu] = useState<string | undefined>(
+    undefined
+  );
 
-  const open = (key?: string) => {
+  const open = (key?: string, subKey?: string) => {
     setIsSettingOpen(true);
     setSelectedMenu(key || "common");
+    setSelectedSubMenu(subKey);
   };
 
-  const dismiss = () => setIsSettingOpen(false);
+  const dismiss = () => {
+    setIsSettingOpen(false);
+    setSelectedSubMenu(undefined);
+  };
 
   const settingMenu: TSettingMenuItem[] = [
     {
@@ -108,10 +116,16 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
   );
 
   return (
-    <SettingsContext.Provider value={{ open, dismiss }}>
+    <SettingsContext.Provider value={{ open, dismiss, selectedSubMenu }}>
       {children}
 
-      <Dialog open={isSettingOpen} onOpenChange={setIsSettingOpen}>
+      <Dialog
+        open={isSettingOpen}
+        onOpenChange={(open) => {
+          setIsSettingOpen(open);
+          if (!open) setSelectedSubMenu(undefined);
+        }}
+      >
         <DialogContent className="w-[96dvw] max-h-[80dvh] rounded-2xl md:min-w-[800px] gap-0 md:h-[600px] flex flex-col overflow-hidden border border-white/5 p-0">
           <div className="w-full px-4 py-3 border-b border-zinc-500/20">
             <p className="text-md font-medium">Settings</p>
@@ -122,7 +136,10 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
                 <Button
                   variant={selectedMenu === menu.key ? "secondary" : "ghost"}
                   key={menu.key}
-                  onClick={() => setSelectedMenu(menu.key)}
+                  onClick={() => {
+                    setSelectedMenu(menu.key);
+                    setSelectedSubMenu(undefined);
+                  }}
                   className="justify-start gap-2 px-2"
                   size="default"
                 >

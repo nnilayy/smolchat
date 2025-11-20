@@ -1,20 +1,16 @@
 import { useToast } from "@/components/ui/use-toast";
-
 import axios from "axios";
-import { SettingsContainer } from "../settings-container";
 import { ArrowRight, CaretDown, Info } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePreferenceContext } from "@/context/preferences";
 import { useEffect, useState } from "react";
-import { TPreferences } from "@/hooks/use-preferences";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SettingCard } from "../setting-card";
 import { Flex } from "@/components/ui/flex";
 import { Type } from "@/components/ui/text";
 
@@ -22,14 +18,26 @@ export const WebSearchPlugin = () => {
   const { toast } = useToast();
   const { preferences, updatePreferences } = usePreferenceContext();
 
-  useEffect(() => {}, []);
+  const [googleEngineId, setGoogleEngineId] = useState("");
+  const [googleApiKey, setGoogleApiKey] = useState("");
+  const [tavilyKey, setTavilyKey] = useState("");
 
-  const handleRunTest = async () => {
+  useEffect(() => {
+    setGoogleEngineId(preferences.googleSearchEngineId || "");
+    setGoogleApiKey(preferences.googleSearchApiKey || "");
+    setTavilyKey(preferences.tavilyApiKey || "");
+  }, [
+    preferences.googleSearchEngineId,
+    preferences.googleSearchApiKey,
+    preferences.tavilyApiKey,
+  ]);
+
+  const handleRunGoogleTest = async () => {
     try {
       const url = "https://www.googleapis.com/customsearch/v1";
       const params = {
-        key: preferences.googleSearchApiKey,
-        cx: preferences.googleSearchEngineId,
+        key: googleApiKey,
+        cx: googleEngineId,
         q: "Latest news",
       };
 
@@ -53,25 +61,45 @@ export const WebSearchPlugin = () => {
     }
   };
 
+  const handleSaveGoogle = () => {
+    updatePreferences({
+      googleSearchEngineId: googleEngineId,
+      googleSearchApiKey: googleApiKey,
+    });
+    toast({
+      title: "Success",
+      description: "Google Search settings saved",
+      variant: "default",
+    });
+  };
+
+  const handleRemoveGoogle = () => {
+    setGoogleEngineId("");
+    setGoogleApiKey("");
+    updatePreferences({
+      googleSearchEngineId: "",
+      googleSearchApiKey: "",
+    });
+    toast({
+      title: "Removed",
+      description: "Google Search settings removed",
+      variant: "default",
+    });
+  };
+
   const handleSaveTavilyKey = async () => {
-    if (!preferences.tavilyApiKey) {
-      toast({
-        title: "Error",
-        description: "Please enter an API key",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!tavilyKey) return;
 
     try {
       const response = await axios.post("https://api.tavily.com/search", {
-        api_key: preferences.tavilyApiKey,
+        api_key: tavilyKey,
         query: "test",
         search_depth: "basic",
         max_results: 1,
       });
 
       if (response.status === 200) {
+        updatePreferences({ tavilyApiKey: tavilyKey });
         toast({
           title: "Success",
           description: "Tavily API key verified and saved",
@@ -88,6 +116,7 @@ export const WebSearchPlugin = () => {
   };
 
   const handleRemoveTavilyKey = () => {
+    setTavilyKey("");
     updatePreferences({ tavilyApiKey: "" });
     toast({
       title: "Removed",
@@ -96,11 +125,17 @@ export const WebSearchPlugin = () => {
     });
   };
 
+  const hasGoogleChanges =
+    (googleEngineId && googleEngineId !== preferences.googleSearchEngineId) ||
+    (googleApiKey && googleApiKey !== preferences.googleSearchApiKey);
+
+  const hasGoogleSaved =
+    preferences.googleSearchEngineId || preferences.googleSearchApiKey;
+
   return (
     <Flex
       direction={"col"}
       gap={"sm"}
-      className="border-t pt-2 border-white/10"
     >
       <Flex className="w-full" justify={"between"} items="center">
         <Type size={"sm"} textColor={"secondary"}>
@@ -136,49 +171,35 @@ export const WebSearchPlugin = () => {
         </DropdownMenu>
       </Flex>
       {preferences.defaultWebSearchEngine === "google" && (
-        <SettingCard className="flex flex-col w-full items-start gap-2 py-3">
-          <Flex direction={"col"} gap="sm" className="w-full">
-            <Type
-              size={"xs"}
-              className="flex flex-row gap-2 items-center"
-              textColor={"secondary"}
-            >
-              Google Search Engine ID <Info weight="regular" size={14} />
-            </Type>
-            <Input
-              name="googleSearchEngineId"
-              type="text"
-              value={preferences.googleSearchEngineId}
-              autoCapitalize="off"
-              onChange={(e) => {
-                updatePreferences({
-                  googleSearchEngineId: e.target.value,
-                });
-              }}
-            />
-          </Flex>
-          <Flex direction={"col"} gap={"sm"} className="w-full">
-            <Type
-              size={"xs"}
-              className="flex flex-row gap-2 items-center"
-              textColor={"secondary"}
-            >
-              Google Search Api Key <Info weight="regular" size={14} />
-            </Type>
-            <Input
-              name="googleSearchApiKey"
-              type="text"
-              value={preferences.googleSearchApiKey}
-              autoCapitalize="off"
-              onChange={(e) => {
-                updatePreferences({
-                  googleSearchApiKey: e.target.value,
-                });
-              }}
-            />
-          </Flex>
-          <Flex gap="sm">
-            <Button onClick={handleRunTest} size={"sm"}>
+        <div className="flex flex-col w-full gap-2 pt-1">
+          <div className="flex flex-row items-end justify-between">
+            <p className="text-xs md:text-sm text-zinc-500">
+              Google Search Engine ID
+            </p>
+          </div>
+          <Input
+            name="googleSearchEngineId"
+            type="text"
+            value={googleEngineId}
+            autoCapitalize="off"
+            disabled={!!preferences.googleSearchEngineId}
+            onChange={(e) => setGoogleEngineId(e.target.value)}
+          />
+          <div className="flex flex-row items-end justify-between pt-2">
+            <p className="text-xs md:text-sm text-zinc-500">
+              Google Search Api Key
+            </p>
+          </div>
+          <Input
+            name="googleSearchApiKey"
+            type="text"
+            value={googleApiKey}
+            autoCapitalize="off"
+            disabled={!!preferences.googleSearchApiKey}
+            onChange={(e) => setGoogleApiKey(e.target.value)}
+          />
+          <div className="flex flex-row items-center gap-2 pt-2">
+            <Button onClick={handleRunGoogleTest} size={"sm"}>
               Run check
             </Button>
             <Button
@@ -193,62 +214,74 @@ export const WebSearchPlugin = () => {
             >
               Get your API key here <ArrowRight size={16} weight="bold" />
             </Button>
-          </Flex>
-        </SettingCard>
-      )}
-      {preferences.defaultWebSearchEngine === "tavily" && (
-        <SettingCard className="flex flex-col w-full items-start gap-2 py-3">
-          <Flex direction={"col"} gap="sm" className="w-full">
-            <Type
-              size={"xs"}
-              className="flex flex-row gap-2 items-center"
-              textColor={"secondary"}
-            >
-              Tavily API Key <Info weight="regular" size={14} />
-            </Type>
-            <Input
-              name="tavilyApiKey"
-              type="password"
-              value={preferences.tavilyApiKey || ""}
-              autoCapitalize="off"
-              placeholder="tvly-..."
-              onChange={(e) => {
-                updatePreferences({
-                  tavilyApiKey: e.target.value,
-                });
-              }}
-            />
-          </Flex>
-          <Flex gap="sm" className="w-full justify-between items-center">
-            <Flex gap="sm">
+            {hasGoogleChanges && (
+              <Button onClick={handleSaveGoogle} size={"sm"}>
+                Save API Key
+              </Button>
+            )}
+            {hasGoogleSaved && (
               <Button
                 size={"sm"}
-                onClick={handleSaveTavilyKey}
-                disabled={!preferences.tavilyApiKey}
+                variant={"outline"}
+                onClick={handleRemoveGoogle}
               >
-                Save
+                Remove API Key
               </Button>
-              {preferences.tavilyApiKey && (
-                <Button
-                  size={"sm"}
-                  variant={"destructive"}
-                  onClick={handleRemoveTavilyKey}
-                >
-                  Remove
-                </Button>
-              )}
-            </Flex>
+            )}
+          </div>
+          <p className="text-xs text-zinc-400 flex flex-row items-center gap-1">
+            <Info size={12} weight="bold" />
+            Your API Key is stored locally on your browser and never sent anywhere else.
+          </p>
+        </div>
+      )}
+      {preferences.defaultWebSearchEngine === "tavily" && (
+        <div className="flex flex-col w-full gap-2 pt-1">
+          <div className="flex flex-row items-end justify-between">
+            <p className="text-xs md:text-sm text-zinc-500">Tavily API Key</p>
+          </div>
+          <Input
+            name="tavilyApiKey"
+            type="password"
+            value={tavilyKey}
+            autoCapitalize="off"
+            placeholder="tvly-..."
+            disabled={!!preferences.tavilyApiKey}
+            onChange={(e) => setTavilyKey(e.target.value)}
+          />
+          <div className="flex flex-row items-center gap-2">
             <Button
               size={"sm"}
               variant={"secondary"}
               onClick={() => {
-                window.open("https://tavily.com/", "_blank");
+                window.open("https://app.tavily.com/home", "_blank");
               }}
             >
-              Get Key <ArrowRight size={16} weight="bold" className="ml-2" />
+              Get your API key here <ArrowRight size={16} weight="bold" className="ml-2" />
             </Button>
-          </Flex>
-        </SettingCard>
+            {tavilyKey && tavilyKey !== preferences.tavilyApiKey && (
+              <Button
+                size={"sm"}
+                onClick={handleSaveTavilyKey}
+              >
+                Save API Key
+              </Button>
+            )}
+            {preferences.tavilyApiKey && (
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                onClick={handleRemoveTavilyKey}
+              >
+                Remove API Key
+              </Button>
+            )}
+          </div>
+          <p className="text-xs text-zinc-400 flex flex-row items-center gap-1">
+            <Info size={12} weight="bold" />
+            Your API Key is stored locally on your browser and never sent anywhere else.
+          </p>
+        </div>
       )}
     </Flex>
   );

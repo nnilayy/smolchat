@@ -4,8 +4,8 @@ import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { useLLMTest } from "@/hooks/use-llm-test";
-import { SettingsContainer } from "../settings-container";
 import { usePreferenceContext } from "@/context/preferences";
+import { Flex } from "@/components/ui/flex";
 
 export const AnthropicSettings = () => {
   const [key, setKey] = useState<string>("");
@@ -15,7 +15,7 @@ export const AnthropicSettings = () => {
     setKey(apiKeys.anthropic || "");
   }, [apiKeys.anthropic]);
   return (
-    <SettingsContainer title="Anthropic Settings">
+    <Flex direction={"col"} gap="sm">
       <div className="flex flex-row items-end justify-between">
         <p className="text-xs md:text-sm  text-zinc-500">Anthropic API Key</p>
       </div>
@@ -24,6 +24,7 @@ export const AnthropicSettings = () => {
         value={key}
         type="password"
         autoComplete="off"
+        disabled={!!apiKeys.anthropic}
         onChange={(e) => {
           setKey(e.target.value);
         }}
@@ -67,6 +68,6 @@ export const AnthropicSettings = () => {
           else.
         </p>
       </div>
-    </SettingsContainer>
+    </Flex>
   );
 };
