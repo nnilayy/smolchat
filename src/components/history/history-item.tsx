@@ -120,7 +120,7 @@ export const HistoryItem = ({
               e.stopPropagation();
             }}
           >
-            <Edit02Icon size={14} variant="stroke" strokeWidth="2" />
+            <Edit02Icon size={14} strokeWidth="2" />
           </Button>
           <Tooltip content="Delete">
             <Popover
