@@ -48,7 +48,6 @@ export const useRecordVoice = () => {
           >
             <StopIcon
               size={18}
-              variant="solid"
               strokeWidth="2"
               className="text-red-300"
             />{" "}
