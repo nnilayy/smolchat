@@ -73,7 +73,7 @@ export const Navbar = () => {
         <Tooltip content="More" side="left" sideOffset={4}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="iconSm">
-              <MoreHorizontalIcon size={20} variant="solid" />
+              <MoreHorizontalIcon size={20} />
             </Button>
           </DropdownMenuTrigger>
         </Tooltip>

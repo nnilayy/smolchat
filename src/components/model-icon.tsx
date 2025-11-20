@@ -42,7 +42,7 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
           size === "lg" && "min-w-10 h-10"
         )}
       >
-        <SparklesIcon size={16} strokeWidth={1.5} variant="solid" />
+        <SparklesIcon size={16} strokeWidth={1.5} />
       </div>
     );
   }

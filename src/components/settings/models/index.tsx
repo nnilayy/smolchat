@@ -68,13 +68,11 @@ export const ModelSettings = () => {
                   <CheckmarkCircle02Icon
                     size={20}
                     strokeWidth={1.5}
-                    variant="solid"
                   />
                 ) : (
                   <AlertCircleIcon
                     size={20}
                     strokeWidth={1.5}
-                    variant="solid"
                   />
                 )}
               </div>
