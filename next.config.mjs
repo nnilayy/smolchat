@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["faiss-node"],
-  },
+  serverExternalPackages: ["faiss-node"],
   async rewrites() {
     return [
       // Wildcard path matching
