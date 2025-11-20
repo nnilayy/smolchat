@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const headersList = headers();
+  const headersList = await headers();
   const apikey = headersList.get("x-api-key");
 
   if (!apikey) {
