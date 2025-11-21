@@ -3,6 +3,7 @@ import { TBaseModel, TModelKey } from "./use-model-list";
 import { TToolKey } from "./use-tools";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TAssistant } from "./use-chat-session";
+import { defaultSystemPrompt } from "@/lib/system-prompt";
 
 export type TApiKeys = Partial<Record<TBaseModel, string>>;
 export type TPreferences = {
@@ -35,7 +36,7 @@ export type TPreferences = {
 
 export const defaultPreferences: TPreferences = {
   defaultAssistant: "gpt-4o-mini",
-  systemPrompt: "You're helpful assistant that can help me with my questions.",
+  systemPrompt: defaultSystemPrompt,
   messageLimit: 30,
   temperature: 0.5,
   maxTokens: 1000,

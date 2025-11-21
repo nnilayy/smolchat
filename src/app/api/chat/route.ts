@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAgent } from "langchain";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
@@ -380,6 +380,10 @@ export async function POST(req: NextRequest) {
           return new AIMessage(msg.content);
         }
       });
+
+      if (systemPrompt) {
+        messageHistory.unshift(new SystemMessage(systemPrompt));
+      }
 
       const stream = await modelInstance.stream(messageHistory);
 
