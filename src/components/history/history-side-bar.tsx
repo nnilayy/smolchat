@@ -16,10 +16,10 @@ export const HistorySidebar = () => {
 
   return (
     <Drawer.Root direction="left" open={open} onOpenChange={setOpen}>
-      <Tooltip content="Chat History" side="left" sideOffset={4}>
+      <Tooltip content="Chat History" side="bottom" sideOffset={4}>
         <Drawer.Trigger asChild>
-          <Button variant="ghost" size="iconSm">
-            <SidebarLeftIcon size={20} strokeWidth="2" />
+          <Button variant="ghost" size="icon">
+            <SidebarLeftIcon size={24} strokeWidth="2" />
           </Button>
         </Drawer.Trigger>
       </Tooltip>

@@ -26,12 +26,12 @@ import { ArrowDown02Icon, Navigation03Icon } from "hugeicons-react";
 import { TAssistant } from "@/hooks/use-chat-session";
 import { slideUpVariant } from "@/lib/framer-motion";
 import { cn } from "@/lib/utils";
-import { ChatExamples } from "./chat-examples";
+import { ChatExamples, TExample } from "./chat-examples";
 import { ChatGreeting } from "./chat-greeting";
 import { PluginSelect } from "./plugin-select";
 import { QuickSettings } from "./quick-settings";
 import { Button } from "./ui/button";
-import { ChatFileUpload } from "./chat-file-upload";
+import { ChatFileUpload, ChatFileUploadRef } from "./chat-file-upload";
 import { useDocumentContext } from "@/context/documents";
 import { Badge } from "./ui/badge";
 import { FileText } from "@phosphor-icons/react";
@@ -70,9 +70,52 @@ export const ChatInput = () => {
   const isRagEnabled = preferences.defaultPlugins?.includes("retrieval_tool");
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileUploadRef = useRef<ChatFileUploadRef>(null);
   const [selectedAssistantKey, setSelectedAssistantKey] = useState<
     TAssistant["key"]
   >(preferences.defaultAssistant);
+
+  const handleExampleClick = (example: TExample) => {
+    editor?.commands.setContent(example.prompt);
+
+    let toolKey: string | undefined;
+    switch (example.title) {
+      case "Search Web":
+        toolKey = "web_search";
+        break;
+      case "Youtube Search":
+        toolKey = "youtube_tool";
+        break;
+      case "Search Any WebPage":
+        toolKey = "web_reader_tool";
+        break;
+      case "Wolfram Alpha":
+        toolKey = "wolfram_tool";
+        break;
+      case "Chat with Docs":
+        toolKey = "retrieval_tool";
+        break;
+    }
+
+    if (toolKey) {
+      const currentPlugins = preferences.defaultPlugins || [];
+      if (!currentPlugins.includes(toolKey)) {
+        updatePreferences({
+          defaultPlugins: [...currentPlugins, toolKey],
+        });
+      }
+    }
+
+    if (example.title === "Chat with Docs") {
+      setTimeout(() => {
+        fileUploadRef.current?.open();
+      }, 100);
+    } else {
+      setTimeout(() => {
+        sendMessage();
+      }, 100);
+    }
+  };
 
   useEffect(() => {
     const handleDragOver = (e: DragEvent) => {
@@ -319,8 +362,8 @@ export const ChatInput = () => {
       className={cn(
         "flex flex-col items-center justify-center absolute bottom-0 px-2 md:px-4 pb-4 pt-16 gap-2",
         "bg-gradient-to-t transition-all ease-in-out duration-1000 from-white dark:from-zinc-800 to-transparent from-70%",
-        "left-12 right-0 md:left-14 md:right-0",
-        isFreshSession && "top-0 pb-32"
+        "left-0 right-0",
+        isFreshSession && "top-0 pb-4 pt-32"
       )}
     >
       {isFreshSession && <ChatGreeting />}
@@ -352,7 +395,10 @@ export const ChatInput = () => {
               </div>
               <div className="flex flex-row items-center w-full justify-start gap-0 pt-1 pb-2 px-2">
                 <div className="mr-2">
-                  <ChatFileUpload disabled={!isRagEnabled} />
+                  <ChatFileUpload
+                    disabled={!isRagEnabled}
+                    ref={fileUploadRef}
+                  />
                 </div>
                 <Button
                   variant={"ghost"}
@@ -393,7 +439,9 @@ export const ChatInput = () => {
             </motion.div>
         )}
       </div>
-      {isFreshSession && <ChatExamples />}
+      {isFreshSession && (
+        <ChatExamples onClick={handleExampleClick} />
+      )}
       {isDragging && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-200 pointer-events-none">
           <div className="w-full h-full border-[3px] border-dashed border-zinc-400 dark:border-zinc-500 m-6 rounded-3xl flex flex-col items-center justify-center gap-4 bg-white/5 dark:bg-black/5 animate-pulse">

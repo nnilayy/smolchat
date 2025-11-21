@@ -25,7 +25,7 @@ export const ChatMessages = () => {
   };
   return (
     <div
-      className="flex flex-col w-full items-center h-[100dvh] overflow-y-auto no-scrollbar pt-[60px] pb-[200px] pl-12 md:pl-14"
+      className="flex flex-col w-full items-center h-[100dvh] overflow-y-auto no-scrollbar pt-[60px] pb-[200px]"
       ref={chatContainer}
       id="chat-container"
     >
