@@ -49,8 +49,8 @@ Contributions are welcome! If you have suggestions, bug reports, or feature requ
 
 2. Clone your fork:
 ```python
-git clone https://github.com/nnilayy/biocore.git
-cd biocore
+git clone https://github.com/nnilayy/smolchat.git
+cd smolchat
 ```
 
 3. Create your feature branch:
