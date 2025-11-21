@@ -45,7 +45,7 @@ Contributions are welcome! If you have suggestions, bug reports, or feature requ
 
 ### Steps to Contribute:
 
-1. Fork the repository ([Click here to fork BioCore](https://github.com/nnilayy/BioCore/fork))
+1. Fork the repository ([Fork smolchat](https://github.com/nnilayy/smolchat/fork))
 
 2. Clone your fork:
 ```python
