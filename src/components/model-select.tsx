@@ -78,6 +78,7 @@ export const ModelSelect = ({
                   ) : (
                     <ModelIcon type="custom" size="sm" />
                   )}
+                  {assistant.name}
                   {model?.isNew && <Badge>New</Badge>}
                 </DropdownMenuItem>
               );

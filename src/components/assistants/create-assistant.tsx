@@ -58,7 +58,7 @@ export const CreateAssistant = ({
         </p>
         <Badge>Beta</Badge>
       </div>
-      <div className="flex flex-col w-full p-4 gap-6 items-start h-full overflow-y-auto no-scrollbar pb-[100px]">
+      <div className="flex flex-col w-full p-4 gap-4 items-start flex-1 overflow-y-auto no-scrollbar">
         <div className="flex flex-row items-center justify-between gap-2 w-full">
           <FormLabel label="Base Model" />
           <ModelSelect
@@ -94,7 +94,7 @@ export const CreateAssistant = ({
             placeholder="You're a helpful Assistant. Your role is to help users with their queries."
             value={formik.values.systemPrompt}
             onChange={formik.handleChange}
-            className="w-full"
+            className="w-full min-h-[100px]"
           />
         </div>
       </div>
