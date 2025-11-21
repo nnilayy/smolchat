@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
         tools.push(
           new DynamicStructuredTool({
             name: "web_search",
-            description: "A web search tool that provides access to real-time information and fact verification. Use this tool whenever you feel unconfident about an answer, need to verify facts, or require external information to provide a complete response. If you think a search might help confirm details or provide better context, do not hesitate to use this tool. Input should be a search query.",
+            description: "Use this to look up factual information, current events, definitions, scientific concepts, historical data, or anything requiring verification from the internet. This is your primary tool for retrieving up-to-date information and confirming details beyond your internal knowledge.",
             schema: z.object({ input: z.string() }),
             func: async ({ input }) => {
               console.log("[Tavily] Tool called with input:", input);
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
       tools.push(
         new DynamicStructuredTool({
           name: "web_reader_tool",
-          description: "Read and extract content from specific web pages. Use this tool when the user provides one or more URLs and asks to read, summarize, or extract information from them.",
+          description: "Use this tool whenever the user provides a link that is not a YouTube URL. The tool fetches the full content of the webpage, allowing you to read, extract, and summarize all relevant information directly from the site. Use the retrieved content to answer questions, verify details, give explanations, or provide insights based on what the webpage contains.",
           schema: z.object({
             urls: z.array(z.string()).describe("The list of URLs to read."),
           }),
@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
         new DynamicStructuredTool({
           name: "retrieval_tool",
           description:
-            "Search for information in the uploaded documents. Use this tool to answer questions about the user's files.",
+            "Use this tool whenever the user has uploaded a document and asks questions related to that document. This tool allows you to extract information directly from the uploaded file, read specific sections, summarize content, pull out key details, and answer user questions accurately based on the document. It also supports deeper reasoning, comparisons, and interpretation of the material, making it essential for any doc-based query.",
           schema: z.object({ input: z.string() }),
           func: async ({ input }) => {
             console.log("[Retrieval] Tool called with input:", input);
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
       tools.push(
         new DynamicStructuredTool({
           name: "youtube_tool",
-          description: "Extracts transcripts and video information from YouTube videos. Use this tool when the user provides a YouTube video URL.",
+          description: "Use this tool whenever the user provides a YouTube link or any variation of a YouTube video URL. The tool retrieves the full transcription of the video, which you can then use to answer questions, summarize content, extract key points, analyze specific segments, or provide detailed insights about the video. This tool is specifically for understanding and working with video content via its transcript.",
           schema: z.object({ input: z.string() }),
           func: async ({ input }) => {
             console.log("[YouTube] Tool called with input:", input);
@@ -211,7 +211,7 @@ export async function POST(req: NextRequest) {
           appid: searchPreferences.wolframAppId,
         });
         wolframTool.description =
-          "A wrapper around Wolfram Alpha. Useful for when you need to answer questions about Math, Science, Technology, Culture, Society and Everyday Life. Input should be a search query. Use this tool to get current time and weather.";
+          "Use this for any query requiring precise, computation-backed results. This includes mathematics, physics, chemistry, engineering, statistics, conversions, and structured scientific facts. You should also use Wolfram for exact factual queries such as the current time in a specific location, weather conditions, geographic details, astronomy information, or any scenario where accuracy is essential. Wolfram can generate mathematical and scientific plots and visualizations—request these when useful, and it will return image links that can be displayed directly in your response.";
         tools.push(wolframTool);
       }
     }
@@ -221,7 +221,7 @@ export async function POST(req: NextRequest) {
         new DynamicStructuredTool({
           name: "memory",
           description:
-            "A tool that allows the agent to store things that the user has asked them to remember or consider important. Use this tool precisely to store relevant and important information about the user when they request it or when you identify key context that should persist for future interactions.",
+            "Use this to store important user-specific information that will matter in future conversations. Only store meaningful preferences or details the user explicitly wants remembered. Recall stored memory only when it genuinely benefits the user without being intrusive.",
           schema: z.object({
             memory: z
               .string()

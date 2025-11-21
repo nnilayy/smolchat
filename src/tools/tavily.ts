@@ -17,7 +17,9 @@ const tavilySearchTool = (args: TToolArg) => {
     func: async ({ input }, runManager) => {
       try {
         const tavilySearch = new TavilySearch({
-          maxResults: 20,
+          maxResults: 30,
+          searchDepth: "advanced",
+          includeImages: true,
           tavilyApiKey: args.preferences.tavilyApiKey || process.env.TAVILY_API_KEY,
         });
 
