@@ -33,6 +33,7 @@ import {
   Tick01Icon,
   VolumeHighIcon,
   StopIcon,
+  CloudUploadIcon,
 } from "hugeicons-react";
 import { useTextToSpeech } from "@/hooks/use-text-to-speech";
 import { useToast } from "../ui/use-toast";
@@ -189,7 +190,18 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
         items="start"
         className="w-full p-2 flex-1 overflow-hidden"
       >
-        {isLoading && tools?.map(renderTool)}
+        {chatMessage.isUploading && (
+          <div className="flex flex-row gap-2 items-center">
+            <CloudUploadIcon
+              size={18}
+              className="text-zinc-500 animate-pulse"
+            />
+            <Type size="sm" textColor="tertiary">
+              Uploading Files...
+            </Type>
+          </div>
+        )}
+        {!chatMessage.isUploading && isLoading && tools?.map(renderTool)}
 
         {rawAI && (
           <Selection.Root>
@@ -231,7 +243,7 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
           items="center"
           className="w-full pt-1 opacity-100 transition-opacity"
         >
-          {isLoading && (
+          {isLoading && !chatMessage.isUploading && (
             <Flex gap="sm">
               <Spinner />
               <Type size="sm" textColor="tertiary">

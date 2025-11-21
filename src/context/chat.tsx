@@ -196,7 +196,9 @@ export const ChatProvider = ({ children }: TChatProvider) => {
 
   const runModel = async (props: TLLMInputProps) => {
     setIsGenerating(true);
-    setCurrentMessage(undefined);
+    if (props.messageId !== currentMessage?.id) {
+      setCurrentMessage(undefined);
+    }
     setCurrentTools([]);
 
     const { sessionId, messageId, input, context, image, assistant } = props;
@@ -577,9 +579,45 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       return;
     }
 
-    if (documents.length > 0) {
+    const input = editor.getText();
+    const messageId = v4();
+    const currentDocuments = [...documents];
+
+    // Clear editor and documents immediately for optimistic UI
+    editor.commands.clearContent();
+    editor.commands.insertContent("");
+    editor.commands.focus("end");
+    clearDocuments();
+    setContextValue("");
+
+    if (currentDocuments.length > 0) {
+      setIsGenerating(true);
+      setCurrentMessage({
+        id: messageId,
+        sessionId: currentSession.id,
+        rawHuman: input,
+        createdAt: moment().toISOString(),
+        isLoading: true,
+        isUploading: true,
+        files: currentDocuments.map((doc) => ({
+          name: doc.file.name,
+          type: doc.file.type,
+        })),
+        inputProps: {
+          input,
+          context: contextValue,
+          sessionId: currentSession.id,
+          assistant: props.assistant,
+          files: currentDocuments.map((doc) => ({
+            name: doc.file.name,
+            type: doc.file.type,
+          })),
+          messageId,
+        },
+      });
+
       const formData = new FormData();
-      documents.forEach((doc) => {
+      currentDocuments.forEach((doc) => {
         formData.append("files", doc.file);
       });
 
@@ -606,11 +644,8 @@ export const ChatProvider = ({ children }: TChatProvider) => {
           const errorData = await response.json();
           throw new Error(errorData.message || "Upload failed");
         }
-
-        toast({
-          title: "Documents Processed",
-          description: "Files uploaded and embedded successfully.",
-        });
+        
+        updateCurrentMessage({ isUploading: false });
       } catch (error: any) {
         console.error("Upload failed", error);
         toast({
@@ -618,27 +653,31 @@ export const ChatProvider = ({ children }: TChatProvider) => {
           description: error.message || "Failed to upload files. Please try again.",
           variant: "destructive",
         });
+        
+        updateCurrentMessage({ 
+          isLoading: false, 
+          isUploading: false,
+          stop: true, 
+          stopReason: "error",
+          errorMessage: "Failed to upload files: " + error.message
+        });
         return;
       }
     }
 
     handleRunModel(
       {
-        input: editor.getText(),
+        input: input,
         context: contextValue,
         sessionId: currentSession?.id?.toString(),
         assistant: props.assistant,
-        files: documents.map((doc) => ({
+        files: currentDocuments.map((doc) => ({
           name: doc.file.name,
           type: doc.file.type,
         })),
+        messageId: messageId,
       },
-      () => {
-        editor.commands.clearContent();
-        editor.commands.insertContent("");
-        editor.commands.focus("end");
-        clearDocuments();
-      }
+      () => {}
     );
   };
   return (

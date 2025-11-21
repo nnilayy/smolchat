@@ -58,6 +58,7 @@ export type TChatMessage = {
   tools?: TToolResponse[];
   createdAt: string;
   files?: { name: string; type: string }[];
+  isUploading?: boolean;
 };
 
 export type TChatSession = {
