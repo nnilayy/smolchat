@@ -9,7 +9,8 @@ import { TavilySearch } from "@langchain/tavily";
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { z } from "zod";
 import axios from "axios";
-import { getVectorStore } from "@/lib/memory-store";
+import { getPineconeStore } from "@/lib/memory-store";
+import { createEmbeddings } from "@/lib/embeddings-factory";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 import { WolframAlphaTool } from "@langchain/community/tools/wolframalpha";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
@@ -27,6 +28,8 @@ export async function POST(req: NextRequest) {
       baseModel,
       tools: toolNames = [],
       searchPreferences = {},
+      ragSettings = {},
+      sessionId,
       systemPrompt,
       signal,
     } = body;
@@ -155,16 +158,26 @@ export async function POST(req: NextRequest) {
           func: async ({ input }) => {
             console.log("[Retrieval] Tool called with input:", input);
             try {
-              const vectorStore = getVectorStore();
-              if (!vectorStore) {
-                console.log("[Retrieval] No vector store found.");
-                return "No documents found. Please upload a file first.";
+              if (!ragSettings.pineconeApiKey || !ragSettings.pineconeIndex || !sessionId) {
+                 return "Error: Pinecone configuration or Session ID missing. Please check your settings and ensure you are in a valid session.";
               }
 
-              console.log("[Retrieval] Vector store found. Searching...");
+              const embeddings = createEmbeddings({
+                provider: ragSettings.provider,
+                apiKey: ragSettings.apiKey,
+                model: ragSettings.model,
+              });
+
+              const vectorStore = await getPineconeStore(embeddings, {
+                pineconeApiKey: ragSettings.pineconeApiKey,
+                pineconeIndex: ragSettings.pineconeIndex,
+                namespace: sessionId,
+              });
+
+              console.log("[Retrieval] Vector store connected. Searching...");
               const results = await vectorStore.similaritySearch(input, 4);
               console.log(`[Retrieval] Found ${results.length} docs.`);
-              return results.map((doc) => doc.pageContent).join("\n\n");
+              return results.map((doc: any) => doc.pageContent).join("\n\n");
             } catch (e: any) {
               console.error("[Retrieval] Error:", e);
               return `Error: ${e.message}`;

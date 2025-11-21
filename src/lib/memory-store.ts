@@ -1,15 +1,29 @@
-import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
+import { PineconeStore } from "@langchain/pinecone";
+import { Pinecone } from "@pinecone-database/pinecone";
+import { Embeddings } from "@langchain/core/embeddings";
 
-declare global {
-  var memoryVectorStore: MemoryVectorStore | undefined;
-}
+export const getPineconeStore = async (
+  embeddings: Embeddings,
+  config: {
+    pineconeApiKey: string;
+    pineconeIndex: string;
+    namespace: string;
+  }
+) => {
+  const { pineconeApiKey, pineconeIndex, namespace } = config;
 
-export const getVectorStore = () => global.memoryVectorStore;
+  if (!pineconeApiKey || !pineconeIndex) {
+    throw new Error("Pinecone API Key and Index Name are required");
+  }
 
-export const setVectorStore = (store: MemoryVectorStore) => {
-  global.memoryVectorStore = store;
-};
+  const pinecone = new Pinecone({
+    apiKey: pineconeApiKey,
+  });
 
-export const clearVectorStore = () => {
-  global.memoryVectorStore = undefined;
+  const index = pinecone.Index(pineconeIndex);
+
+  return await PineconeStore.fromExistingIndex(embeddings, {
+    pineconeIndex: index,
+    namespace,
+  });
 };

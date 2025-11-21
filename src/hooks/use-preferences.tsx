@@ -31,6 +31,8 @@ export type TPreferences = {
     chunkOverlap: number;
     searchType: "similarity" | "mmr";
     similarityThreshold: number;
+    pineconeIndex?: string;
+    pineconeApiKey?: string;
   };
 };
 
@@ -55,6 +57,8 @@ export const defaultPreferences: TPreferences = {
     chunkOverlap: 200,
     searchType: "similarity",
     similarityThreshold: 0.5,
+    pineconeIndex: "",
+    pineconeApiKey: "",
   },
 };
 

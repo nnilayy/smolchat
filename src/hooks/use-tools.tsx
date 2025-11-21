@@ -133,16 +133,29 @@ export const useTools = () => {
         if (!preferences.ragSettings?.apiKey) {
           return false;
         }
+        if (!preferences.ragSettings?.pineconeApiKey || !preferences.ragSettings?.pineconeIndex) {
+          return false;
+        }
         return true;
       },
       validationFailedAction: () => {
-        toast({
-          title: "Embedding Model API Key Missing",
-          description:
-            "To use RAG tool, set an API key for the embedding model",
-          variant: "destructive",
-        });
-        open("rag", "embedding");
+        if (!preferences.ragSettings?.apiKey) {
+          toast({
+            title: "Embedding Model API Key Missing",
+            description:
+              "To use RAG tool, set an API key for the embedding model",
+            variant: "destructive",
+          });
+          open("rag", "embedding");
+        } else {
+          toast({
+            title: "Pinecone Configuration Missing",
+            description:
+              "To use RAG tool, set Pinecone API Key and Index Name",
+            variant: "destructive",
+          });
+          open("rag", "pinecone");
+        }
       },
     },
     {

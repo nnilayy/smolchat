@@ -4,8 +4,7 @@ import path from "path";
 import os from "os";
 import { loadAndSplitDocuments } from "@/lib/document-loader";
 import { createEmbeddings, EmbeddingProvider } from "@/lib/embeddings-factory";
-import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
-import { getVectorStore, setVectorStore } from "@/lib/memory-store";
+import { getPineconeStore } from "@/lib/memory-store";
 
 export async function POST(request: NextRequest) {
   const data = await request.formData();
@@ -17,6 +16,11 @@ export async function POST(request: NextRequest) {
   const model = data.get("model") as string;
   const chunkSize = parseInt(data.get("chunkSize") as string) || 1000;
   const chunkOverlap = parseInt(data.get("chunkOverlap") as string) || 200;
+  
+  // Extract Pinecone settings
+  const pineconeApiKey = data.get("pineconeApiKey") as string;
+  const pineconeIndex = data.get("pineconeIndex") as string;
+  const sessionId = data.get("sessionId") as string;
 
   if (!files || files.length === 0) {
     return NextResponse.json({ success: false, message: "No files uploaded" }, { status: 400 });
@@ -24,6 +28,10 @@ export async function POST(request: NextRequest) {
 
   if (!provider || !apiKey) {
       return NextResponse.json({ success: false, message: "Provider and API Key are required" }, { status: 400 });
+  }
+
+  if (!pineconeApiKey || !pineconeIndex || !sessionId) {
+      return NextResponse.json({ success: false, message: "Pinecone API Key, Index Name, and Session ID are required" }, { status: 400 });
   }
 
   const uploadDir = path.join(os.tmpdir(), "temp_upload");
@@ -60,18 +68,16 @@ export async function POST(request: NextRequest) {
         model
     });
 
-    // 4. Store in Vector Store
-    let vectorStore = getVectorStore();
-    if (!vectorStore) {
-        console.log("Creating new vector store");
-        vectorStore = new MemoryVectorStore(embeddings);
-        setVectorStore(vectorStore);
-    } else {
-        console.log("Using existing vector store");
-    }
+    // 4. Store in Pinecone
+    console.log(`Storing in Pinecone Index: ${pineconeIndex}, Namespace: ${sessionId}`);
+    const vectorStore = await getPineconeStore(embeddings, {
+        pineconeApiKey,
+        pineconeIndex,
+        namespace: sessionId,
+    });
     
     await vectorStore.addDocuments(docs);
-    console.log(`Added ${docs.length} documents to vector store`);
+    console.log(`Added ${docs.length} documents to Pinecone`);
 
     // 5. Cleanup files
     for (const file of savedFiles) {

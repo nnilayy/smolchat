@@ -333,6 +333,8 @@ export const ChatProvider = ({ children }: TChatProvider) => {
             tavilyApiKey: preferences.tavilyApiKey,
             wolframAppId: preferences.wolframAppId,
           },
+          ragSettings: preferences.ragSettings,
+          sessionId: sessionId,
           systemPrompt: systemPrompt,
         }),
         signal: currentAbortController?.signal,
@@ -588,6 +590,11 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       formData.append("model", ragSettings.model);
       formData.append("chunkSize", ragSettings.chunkSize.toString());
       formData.append("chunkOverlap", ragSettings.chunkOverlap.toString());
+      
+      // Add Pinecone settings
+      formData.append("pineconeApiKey", ragSettings.pineconeApiKey || "");
+      formData.append("pineconeIndex", ragSettings.pineconeIndex || "");
+      formData.append("sessionId", currentSession?.id?.toString() || "");
 
       try {
         const response = await fetch("/api/upload", {
