@@ -34,7 +34,7 @@ export type TPreferences = {
 };
 
 export const defaultPreferences: TPreferences = {
-  defaultAssistant: "gpt-3.5-turbo",
+  defaultAssistant: "gpt-4o-mini",
   systemPrompt: "You're helpful assistant that can help me with my questions.",
   messageLimit: 30,
   temperature: 0.5,

@@ -31,7 +31,7 @@ const memoryTool = (args: TToolArg) => {
       try {
         const existingMemories = preferences?.memories;
         const model = new ChatOpenAI({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o-mini",
           apiKey: apiKeys.openai,
         });
 
@@ -40,7 +40,7 @@ const memoryTool = (args: TToolArg) => {
             `Here is new information: {new_memory} \n and update the following information if required otherwise add new information: """{existing_memory}""" \n{format_instructions} `
           ),
           new ChatOpenAI({
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
             apiKey: apiKeys.openai,
           }),
           memoryParser as any,

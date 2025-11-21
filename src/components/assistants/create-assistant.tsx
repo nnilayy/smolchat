@@ -27,7 +27,7 @@ export const CreateAssistant = ({
     initialValues: {
       name: assistant?.name || "",
       systemPrompt: assistant?.systemPrompt || "",
-      baseModel: assistant?.baseModel || "gpt-3.5-turbo",
+      baseModel: assistant?.baseModel || "gpt-4o-mini",
       type: "custom",
     },
     enableReinitialize: true,

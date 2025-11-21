@@ -10,6 +10,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 export enum ModelType {
   GPT3 = "gpt-3",
   GPT4 = "gpt-4",
+  GPT4o = "gpt-4o",
   CLAUDE2 = "claude-2",
   CLAUDE3 = "claude-3",
 }

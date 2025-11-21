@@ -78,7 +78,7 @@ const botSchema = z.object({
   id: z.string(),
   avatar: z.string().optional(),
   status: z.string().optional(),
-  deafultBaseModel: z.string().default("gpt-3.5-turbo"),
+  deafultBaseModel: z.string().default("gpt-4o-mini"),
 });
 
 const sessionSchema = z.object({
