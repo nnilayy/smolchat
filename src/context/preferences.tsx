@@ -49,8 +49,13 @@ export const PreferenceProvider = ({ children }: TPreferencesProvider) => {
   const [apiKeys, setApiKeys] = useState<TApiKeys>({});
 
   useEffect(() => {
-    preferencesQuery.data &&
-      setPreferences({ ...defaultPreferences, ...preferencesQuery.data });
+    if (preferencesQuery.data) {
+      const merged = { ...defaultPreferences, ...preferencesQuery.data };
+      if (merged.ollamaBaseUrl === "http://localhost:11434") {
+        merged.ollamaBaseUrl = "";
+      }
+      setPreferences(merged);
+    }
   }, [preferencesQuery.data]);
 
   useEffect(() => {

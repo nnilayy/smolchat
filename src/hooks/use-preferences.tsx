@@ -43,7 +43,7 @@ export const defaultPreferences: TPreferences = {
   topK: 5,
   defaultPlugins: [],
   defaultWebSearchEngine: "tavily",
-  ollamaBaseUrl: "http://localhost:11434",
+  ollamaBaseUrl: "",
   memories: [],
   ragSettings: {
     provider: "google",

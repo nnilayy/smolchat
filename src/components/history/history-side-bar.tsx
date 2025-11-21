@@ -31,6 +31,9 @@ export const HistorySidebar = () => {
             "flex flex-col rounded-3xl outline-none h-[98dvh] w-[320px] fixed z-[101] md:bottom-2 left-2 top-2 "
           )}
         >
+          <Drawer.Description className="sr-only">
+            Chat History Sidebar
+          </Drawer.Description>
           <div className="bg-zinc-100 dark:bg-zinc-900 h-[98dvh] border border-zinc-200 dark:border-zinc-700 flex flex-row rounded-2xl flex-1 p-2 relative">
             <div className="flex flex-col w-full overflow-y-auto no-scrollbar">
               <div className="flex flex-row justify-between">
@@ -40,8 +43,8 @@ export const HistorySidebar = () => {
                     items="center"
                     gap="sm"
                   >
-                    <ClockCounterClockwise size={18} weight="bold" /> Recent
-                    History
+                    <ClockCounterClockwise size={18} weight="bold" />
+                    <Drawer.Title>Recent History</Drawer.Title>
                   </Flex>
                 </div>
 

@@ -7,7 +7,7 @@ import { PluginSettings } from "@/components/settings/plugins";
 import { RagSettings } from "@/components/settings/rag";
 import { VoiceInput } from "@/components/settings/voice-input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
   BrainIcon,
@@ -127,8 +127,11 @@ export const SettingsProvider = ({ children }: TSettingsProvider) => {
         }}
       >
         <DialogContent className="w-[96dvw] max-h-[80dvh] rounded-2xl md:min-w-[800px] gap-0 md:h-[600px] flex flex-col overflow-hidden border border-white/5 p-0">
+          <DialogDescription className="sr-only">
+            Settings dialog to configure application preferences
+          </DialogDescription>
           <div className="w-full px-4 py-3 border-b border-zinc-500/20">
-            <p className="text-md font-medium">Settings</p>
+            <DialogTitle className="text-md font-medium">Settings</DialogTitle>
           </div>
           <div className="flex flex-row w-full relative h-full overflow-hidden">
             <div className="w-[200px] md:w-[220px] shrink-0 px-2 py-2 h-full border-r border-zinc-500/10 overflow-y-auto no-scrollbar flex flex-col gap-2">

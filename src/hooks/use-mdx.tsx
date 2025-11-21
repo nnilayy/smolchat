@@ -10,7 +10,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { ArrowUpRight, Link } from "@phosphor-icons/react";
-import { ReactNode, useState } from "react";
+import { Children, cloneElement, isValidElement, ReactNode, useState } from "react";
 
 export const REVEAL_ANIMATION_VARIANTS = {
   hidden: { opacity: 0 },
@@ -69,7 +69,16 @@ export const useMarkdown = () => {
           return <td className="p-3 text-sm md:text-base">{children}</td>;
         },
         tableBody: (children) => <tbody>{children}</tbody>,
-        paragraph: (children) => <p>{children}</p>,
+        paragraph: (children) => (
+          <p>
+            {Children.map(children, (child, index) => {
+              if (isValidElement(child) && !child.key) {
+                return cloneElement(child, { key: index });
+              }
+              return child;
+            })}
+          </p>
+        ),
         em: (children) => <em>{children}</em>,
         heading: (children, level) => {
           const Heading = `h${level}` as keyof JSX.IntrinsicElements;

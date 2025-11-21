@@ -61,7 +61,8 @@ export const useModelList = () => {
     queryKey: ["ollama-models"],
     queryFn: () =>
       fetch(`${preferences.ollamaBaseUrl}/api/tags`).then((res) => res.json()),
-    enabled: !!preferences,
+    enabled: !!preferences && !!preferences.ollamaBaseUrl && preferences.ollamaBaseUrl.length > 0,
+    retry: false,
   });
 
   const createInstance = async (model: TModel, apiKey: string) => {
