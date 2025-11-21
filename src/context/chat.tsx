@@ -531,7 +531,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       Paragraph,
       Text,
       Placeholder.configure({
-        placeholder: "Type / or Ask anything...",
+        placeholder: "Ask smolchat anything...",
       }),
       ShiftEnterToLineBreak,
       Highlight.configure({
