@@ -162,7 +162,7 @@ export const useTools = () => {
     },
     {
       key: "wolfram_tool",
-      description: "Use Wolfram Alpha knowledge engine to get precise answers across any domain when needed",
+      description: "Use Wolfram Alpha knowledge engine to get precise answers across any domain",
       tool: wolframTool,
       name: "Wolfram Alpha",
       showInMenu: true,
