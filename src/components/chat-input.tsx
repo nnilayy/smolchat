@@ -15,12 +15,14 @@ import {
   useChatContext,
   usePreferenceContext,
   useSessionsContext,
+  useSettingsContext,
 } from "@/context";
 import {
   defaultPreferences,
   useModelList,
   useRecordVoice,
   useScrollToBottom,
+  useTools,
 } from "@/hooks";
 import { ArrowDown02Icon, Navigation03Icon } from "hugeicons-react";
 import { TAssistant } from "@/hooks/use-chat-session";
@@ -62,9 +64,11 @@ export const ChatInput = () => {
     stopGeneration,
   } = useChatContext();
 
-  const { preferences, updatePreferences } = usePreferenceContext();
-  const { models, getAssistantByKey, getAssistantIcon } = useModelList();
+  const { preferences, updatePreferences, apiKeys } = usePreferenceContext();
+  const { models, getAssistantByKey, getAssistantIcon, getModelByKey } = useModelList();
   const { documents, removeDocument, addDocuments } = useDocumentContext();
+  const { open } = useSettingsContext();
+  const { tools } = useTools();
   const [isDragging, setIsDragging] = useState(false);
 
   const isRagEnabled = preferences.defaultPlugins?.includes("retrieval_tool");
@@ -75,8 +79,13 @@ export const ChatInput = () => {
     TAssistant["key"]
   >(preferences.defaultAssistant);
 
-  const handleExampleClick = (example: TExample) => {
-    editor?.commands.setContent(example.prompt);
+  const handleExampleClick = async (example: TExample) => {
+    const currentModelKey = preferences.defaultAssistant;
+    const model = getModelByKey(currentModelKey);
+    if (model && model.baseModel !== "ollama" && !apiKeys[model.baseModel]) {
+      open("models");
+      return;
+    }
 
     let toolKey: string | undefined;
     switch (example.title) {
@@ -98,6 +107,13 @@ export const ChatInput = () => {
     }
 
     if (toolKey) {
+      const tool = tools.find((t) => t.key === toolKey);
+      const isValidated = await tool?.validate?.();
+      if (tool?.validate !== undefined && !isValidated) {
+        tool?.validationFailedAction?.();
+        return;
+      }
+
       const currentPlugins = preferences.defaultPlugins || [];
       if (!currentPlugins.includes(toolKey)) {
         updatePreferences({
@@ -105,6 +121,8 @@ export const ChatInput = () => {
         });
       }
     }
+
+    editor?.commands.setContent(example.prompt);
 
     if (example.title === "Chat with Docs") {
       setTimeout(() => {
