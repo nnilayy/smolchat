@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import path from "path";
+import os from "os";
 import { loadAndSplitDocuments } from "@/lib/document-loader";
 import { createEmbeddings, EmbeddingProvider } from "@/lib/embeddings-factory";
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Provider and API Key are required" }, { status: 400 });
   }
 
-  const uploadDir = path.join(process.cwd(), "temp_upload");
+  const uploadDir = path.join(os.tmpdir(), "temp_upload");
   
   try {
       await mkdir(uploadDir, { recursive: true });
