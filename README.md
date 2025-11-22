@@ -1,5 +1,5 @@
 <div align="center">
-<img src="public\smolchat-herobanner-big.png" alt="smolchat Hero" width="700"/>
+<img src="assets\smolchat-herobanner-big.png" alt="smolchat Hero" width="700"/>
 <h1 align="center">smolchat</h1>
 
 [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
