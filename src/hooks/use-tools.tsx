@@ -121,7 +121,7 @@ export const useTools = () => {
     },
     {
       key: "retrieval_tool",
-      description: "Search for information from uploaded docs",
+      description: "Search for info from uploaded docs",
       tool: retrievalTool,
       name: "Retrieval Augmented Generation",
       showInMenu: true,
@@ -200,7 +200,7 @@ export const useTools = () => {
     },
     {
       key: "memory",
-      description: "AI will remeber things about you",
+      description: "smolchat will remeber things about you",
       tool: memoryTool,
       name: "Memory",
       showInMenu: true,
