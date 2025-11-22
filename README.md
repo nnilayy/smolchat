@@ -46,8 +46,6 @@
 * **Wolfram Alpha Knowledge Engine**, for precise, factual answers across domains like math, time, weather, and scientific queries,
 * **Long-Term Memory**, which remembers important information about you, such as preferences, facts, or prior answers, to enable personalized suggestions and maintain long-term cross-chat memory context.
 
-## Features
-
 ## Installation & Setup
 
 ### 1. Clone the repository
