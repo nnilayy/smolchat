@@ -112,6 +112,14 @@
   }
 }
 
+.speech-word-highlight {
+  @apply bg-zinc-600/20 border border-zinc-600 text-zinc-900 px-1 rounded-md;
+}
+
+.dark .speech-word-highlight {
+  @apply bg-zinc-200/20 border border-zinc-200 text-zinc-100 px-1 rounded-md;
+}
+
 p {
   margin: 0 !important;
 }

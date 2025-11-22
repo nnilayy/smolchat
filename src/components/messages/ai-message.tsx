@@ -1,5 +1,5 @@
 import { Check, Copy, Quotes, TrashSimple } from "@phosphor-icons/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import * as Selection from "selection-popover";
 
 import {
@@ -58,9 +58,84 @@ export const AIMessage = ({ chatMessage, isLast }: TAIMessage) => {
   const { handleRunModel, setContextValue, editor } = useChatContext();
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { selectedText } = useTextSelection();
-  const { speak, isSpeaking, supported } = useTextToSpeech();
+  const { speak, isSpeaking, supported, highlightRange } = useTextToSpeech();
   const { toast } = useToast();
   const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
+  const highlightedSpanRef = useRef<HTMLSpanElement | null>(null);
+
+  // Effect to handle text highlighting during speech
+  useEffect(() => {
+    // Cleanup function to remove highlight
+    const removeHighlight = () => {
+      if (highlightedSpanRef.current) {
+        const parent = highlightedSpanRef.current.parentNode;
+        if (parent) {
+          // Unwrap
+          while (highlightedSpanRef.current.firstChild) {
+            parent.insertBefore(
+              highlightedSpanRef.current.firstChild,
+              highlightedSpanRef.current
+            );
+          }
+          parent.removeChild(highlightedSpanRef.current);
+          parent.normalize(); // Merge text nodes back
+        }
+        highlightedSpanRef.current = null;
+      }
+    };
+
+    removeHighlight(); // Clear previous
+
+    if (isSpeaking && highlightRange && messageRef.current) {
+      const treeWalker = document.createTreeWalker(
+        messageRef.current,
+        NodeFilter.SHOW_TEXT
+      );
+
+      let currentPos = 0;
+      let startNode: Node | null = null;
+      let endNode: Node | null = null;
+      let startOffset = 0;
+      let endOffset = 0;
+
+      while (treeWalker.nextNode()) {
+        const node = treeWalker.currentNode;
+        const nodeLength = node.textContent?.length || 0;
+
+        if (!startNode && currentPos + nodeLength > highlightRange.start) {
+          startNode = node;
+          startOffset = highlightRange.start - currentPos;
+        }
+
+        if (!endNode && currentPos + nodeLength >= highlightRange.end) {
+          endNode = node;
+          endOffset = highlightRange.end - currentPos;
+          break;
+        }
+
+        currentPos += nodeLength;
+      }
+
+      if (startNode && endNode) {
+        const range = document.createRange();
+        try {
+          range.setStart(startNode, startOffset);
+          range.setEnd(endNode, endOffset);
+
+          // Only highlight if start and end nodes are the same (simple word)
+          // This avoids breaking complex DOM structures
+          if (startNode === endNode) {
+            const span = document.createElement("span");
+            span.className = "speech-word-highlight";
+            range.surroundContents(span);
+            highlightedSpanRef.current = span;
+          }
+        } catch (e) {
+          // Ignore range errors
+        }
+      }
+    }
+  }, [isSpeaking, highlightRange]);
 
   const isToolRunning = !!tools?.filter((t) => !!t?.toolLoading)?.length;
 

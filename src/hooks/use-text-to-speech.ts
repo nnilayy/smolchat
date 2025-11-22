@@ -7,6 +7,10 @@ export const useTextToSpeech = () => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null
   );
+  const [highlightRange, setHighlightRange] = useState<{
+    start: number;
+    end: number;
+  } | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -31,6 +35,7 @@ export const useTextToSpeech = () => {
       if (isSpeaking) {
         synth.cancel();
         setIsSpeaking(false);
+        setHighlightRange(null);
         return;
       }
 
@@ -49,13 +54,26 @@ export const useTextToSpeech = () => {
         newUtterance.voice = englishVoice;
       }
 
+      newUtterance.onboundary = (event) => {
+        if (event.name === "word") {
+          const charIndex = event.charIndex;
+          const charLength = event.charLength || cleanText.substring(charIndex).indexOf(' ') || 0;
+          setHighlightRange({
+            start: charIndex,
+            end: charIndex + (charLength > 0 ? charLength : 0),
+          });
+        }
+      };
+
       newUtterance.onend = () => {
         setIsSpeaking(false);
+        setHighlightRange(null);
       };
       
       newUtterance.onerror = (e) => {
         console.error("TTS Error:", e);
         setIsSpeaking(false);
+        setHighlightRange(null);
       };
 
       setUtterance(newUtterance);
@@ -69,7 +87,8 @@ export const useTextToSpeech = () => {
     if (!supported || !synth) return;
     synth.cancel();
     setIsSpeaking(false);
+    setHighlightRange(null);
   }, [supported, synth]);
 
-  return { speak, cancel, isSpeaking, supported };
+  return { speak, cancel, isSpeaking, supported, highlightRange };
 };
