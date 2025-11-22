@@ -15,7 +15,7 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover dark:bg-zinc-800 text-popover-foreground",
+      "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover dark:bg-zinc-800 text-popover-foreground outline-none",
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ const CommandList = React.forwardRef<
   <CommandPrimitive.List
     ref={ref}
     className={cn(
-      "max-h-[410px] overflow-y-auto no-scrollbar overflow-x-hidden",
+      "max-h-[410px] overflow-y-auto no-scrollbar overflow-x-hidden outline-none",
       className
     )}
     {...props}

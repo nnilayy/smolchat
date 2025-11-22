@@ -30,7 +30,7 @@ export const ChatExamples = ({
     {
       title: "Youtube Search",
       prompt:
-        "Yo smolchat, Summarize this video by the Trast Taste boys: https://www.youtube.com/watch?v=Mx_Ngua4NW4",
+        "Yo smolchat, Summarize this video by the Trash Taste boys: https://www.youtube.com/watch?v=Mx_Ngua4NW4",
       color:
         "bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-400",
       icon: <YoutubeLogo size={24} weight="duotone" />,
