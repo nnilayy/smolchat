@@ -40,14 +40,13 @@
 
 ***smolchat agent*** integrates with external tools to enable dynamic, tool-augmented agentic reasoning. These include:
 
-* YouTube Search, which fetches transcripts from videos and allows question-answering about the content,
-* General Web Search, enabling real-time access to current information,
-* Web Page Search, allowing smolchat to extract and understand content from any webpage for contextual Q&A,
-* Wolfram Alpha, for precise, factual answers across domains like math, time, weather, and scientific queries,
-* Long-Term Memory, which remembers important information about you, such as preferences, facts, or prior answers, to enable personalized suggestions and maintain long-term cross-chat memory context.
+* **YouTube Search**, which fetches transcripts from videos and allows question-answering about the content,
+* **General Web Search**, enabling real-time access to current information,
+* **Web Pages Search**, allowing smolchat to extract and understand content from any webpage for contextual Q&A,
+* **Wolfram Alpha Knowledge Engine**, for precise, factual answers across domains like math, time, weather, and scientific queries,
+* **Long-Term Memory**, which remembers important information about you, such as preferences, facts, or prior answers, to enable personalized suggestions and maintain long-term cross-chat memory context.
 
 ## Features
-## Usage
 
 ### 1. Clone the repository
 
