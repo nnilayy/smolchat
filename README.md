@@ -48,6 +48,8 @@
 
 ## Features
 
+## Installation & Setup
+
 ### 1. Clone the repository
 
 To get started with running smolchat locally, first clone the repository and change into the project directory:
