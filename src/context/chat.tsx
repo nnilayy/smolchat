@@ -497,21 +497,21 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       return;
     }
 
-    const assitantprops = getAssistantByKey(props?.assistant.key);
+    const assistantProps = getAssistantByKey(props?.assistant.key);
 
-    if (!assitantprops) {
+    if (!assistantProps) {
       return;
     }
 
-    const apiKey = apiKeys[assitantprops.model.baseModel];
+    const apiKey = apiKeys[assistantProps.model.baseModel];
 
-    if (!apiKey && assitantprops.model.baseModel !== "ollama") {
+    if (!apiKey && assistantProps.model.baseModel !== "ollama") {
       toast({
         title: "Ahh!",
         description: "API key is missing. Please check your settings.",
         variant: "destructive",
       });
-      openSettings("models", assitantprops.model.baseModel);
+      openSettings("models", assistantProps.model.baseModel);
       return;
     }
 
@@ -522,7 +522,7 @@ export const ChatProvider = ({ children }: TChatProvider) => {
       input: removeExtraSpaces(props?.input),
       context: removeExtraSpaces(props?.context),
       image: props?.image,
-      assistant: assitantprops.assistant,
+      assistant: assistantProps.assistant,
       messageId: props?.messageId,
       files: props?.files,
     });

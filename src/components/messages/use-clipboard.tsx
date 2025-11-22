@@ -6,7 +6,7 @@ type CopyFn = (text: string) => Promise<boolean>;
 
 export function useClipboard() {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
-  const [strokeWidth = "2", setShowCopied] = useState<boolean>(false);
+  const [showCopied, setShowCopied] = useState<boolean>(false);
 
   const copy: CopyFn = useCallback(async (text) => {
     if (!navigator.clipboard) {
@@ -28,5 +28,5 @@ export function useClipboard() {
     }
   }, []);
 
-  return { copiedText, copy, strokeWidth };
+  return { copiedText, copy, showCopied };
 }

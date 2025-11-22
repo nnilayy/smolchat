@@ -49,7 +49,7 @@ export const PluginSelect = ({ selectedAssistantKey }: TPluginSelect) => {
           </PopoverTrigger>
         </Tooltip>
         <PopoverContent
-          className="p-0 w-[340px] dark:bg-zinc-700 mr-8 roundex-2xl"
+          className="p-0 w-[340px] dark:bg-zinc-700 mr-8 rounded-2xl"
           side="top"
         >
           <p className="flex flex-row gap-2 py-2 px-3 text-sm font-medium border-b border-zinc-500/20">

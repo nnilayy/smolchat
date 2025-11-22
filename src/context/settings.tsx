@@ -33,7 +33,7 @@ export const SettingsContext = createContext<undefined | TSettingsContext>(
 export const useSettingsContext = () => {
   const context = useContext(SettingsContext);
   if (context === undefined) {
-    throw new Error("useSettings must be used within a SettingssProvider");
+    throw new Error("useSettings must be used within a SettingsProvider");
   }
   return context;
 };

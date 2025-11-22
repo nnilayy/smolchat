@@ -22,7 +22,7 @@ export const BotAvatar = ({ name, size, avatar }: TBotAvatar) => {
         <Image
           width={0}
           height={0}
-          alt="avarar"
+          alt="avatar"
           sizes="100vw"
           src={avatar}
           className={cn(

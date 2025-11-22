@@ -17,7 +17,7 @@ export const AnthropicSettings = () => {
   return (
     <Flex direction={"col"} gap="sm">
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs md:text-sm  text-zinc-500">Anthropic API Key</p>
+        <p className="text-xs md:text-sm text-zinc-500">Anthropic API Key</p>
       </div>
       <Input
         placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"

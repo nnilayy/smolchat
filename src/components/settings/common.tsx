@@ -200,7 +200,7 @@ export const CommonSettings = () => {
 
         <Flex justify="between">
           <Flex direction="col" items="start">
-            <Type weight="medium">Temprature</Type>
+            <Type weight="medium">Temperature</Type>
             <Type size="xxs" textColor="secondary">
               Maximum number of tokens to generate
             </Type>

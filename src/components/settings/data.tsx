@@ -66,7 +66,7 @@ const chatMessageSchema = z.object({
   isLoading: z.boolean().optional(),
   isToolRunning: z.boolean().optional(),
   hasError: z.boolean().optional(),
-  errorMesssage: z.string().optional(),
+  errorMessage: z.string().optional(),
   createdAt: z.string(),
 });
 
@@ -78,7 +78,7 @@ const botSchema = z.object({
   id: z.string(),
   avatar: z.string().optional(),
   status: z.string().optional(),
-  deafultBaseModel: z.string().default("gpt-4o-mini"),
+  defaultBaseModel: z.string().default("gpt-4o-mini"),
 });
 
 const sessionSchema = z.object({

@@ -15,7 +15,7 @@ import { interVar } from "./fonts";
 
 export const metadata: Metadata = {
   title: "SmolChat",
-  description: "Most intutive all-in-one AI chat client",
+  description: "Most intuitive all-in-one AI chat client",
 };
 
 export const viewport: Viewport = {

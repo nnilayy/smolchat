@@ -200,7 +200,7 @@ export const useTools = () => {
     },
     {
       key: "memory",
-      description: "smolchat will remeber things about you",
+      description: "smolchat will remember things about you",
       tool: memoryTool,
       name: "Memory",
       showInMenu: true,

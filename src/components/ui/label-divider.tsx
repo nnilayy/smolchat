@@ -16,7 +16,7 @@ export const LabelDivider = ({
       animate={{ opacity: 1, transition: { duration: transitionDuration } }}
       className={cn("flex flex-row items-center w-full py-4", className)}
     >
-      <div className="w-full h-[1px] dark:from-white/5 from-black/5 bg-gradient-to-l to-transaprent"></div>
+      <div className="w-full h-[1px] dark:from-white/5 from-black/5 bg-gradient-to-l to-transparent"></div>
       <p className="text-sm md:text-base text-zinc-500 px-2 flex-shrink-0">
         {label}
       </p>
